@@ -4,16 +4,16 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.catsgram.exception.ConditionsNotMetException;
 import ru.yandex.practicum.catsgram.exception.NotFoundException;
 import ru.yandex.practicum.catsgram.model.Post;
+import ru.yandex.practicum.catsgram.model.SortOrder;
 import ru.yandex.practicum.catsgram.model.User;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
+    private final Comparator<Post> postDataComparator = Comparator.comparing(Post::getPostDate);
     private final Map<Long, Post> posts = new HashMap<>();
     private final UserService userService;
 
@@ -21,8 +21,24 @@ public class PostService {
         this.userService = userService;
     }
 
-    public Collection<Post> findAll() {
-        return posts.values();
+    public Collection<Post> findAll(SortOrder sort,int from, int size) {
+        validateParameters(from, size);
+
+        return posts.values()
+                .stream()
+                .sorted(getComparator(sort))
+                .skip(from)
+                .limit(size)
+                .collect(Collectors.toList());
+    }
+
+    private Comparator<Post> getComparator(SortOrder sort) {
+        return sort == SortOrder.ASCENDING ? postDataComparator : postDataComparator.reversed();
+    }
+
+    private void validateParameters(int from, int size) {
+        if (from < 0) { throw new ConditionsNotMetException("Параметр 'from' не может быть отрицательным");}
+        if (size <= 0) { throw new ConditionsNotMetException("Параметр 'size' должен быть положительным");}
     }
 
     public Post create(Post post) {
