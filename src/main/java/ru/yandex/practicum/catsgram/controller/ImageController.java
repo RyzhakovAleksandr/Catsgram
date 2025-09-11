@@ -20,7 +20,7 @@ public class ImageController {
         return imageService.getPostImages(postId);
     }
 
-    @GetMapping(value = "/images/{imagesId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "/images/{imageId}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<byte[]> downloadImage(@PathVariable long imageId) {
         ImageData imageData = imageService.getImageData(imageId);
         HttpHeaders headers = new HttpHeaders();
