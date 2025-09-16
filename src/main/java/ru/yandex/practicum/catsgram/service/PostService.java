@@ -22,8 +22,6 @@ public class PostService {
     }
 
     public Collection<Post> findAll(SortOrder sort,int from, int size) {
-        validateParameters(from, size);
-
         return posts.values()
                 .stream()
                 .sorted(getComparator(sort))
@@ -34,11 +32,6 @@ public class PostService {
 
     private Comparator<Post> getComparator(SortOrder sort) {
         return sort == SortOrder.ASCENDING ? postDataComparator : postDataComparator.reversed();
-    }
-
-    private void validateParameters(int from, int size) {
-        if (from < 0) { throw new ConditionsNotMetException("Параметр 'from' не может быть отрицательным");}
-        if (size <= 0) { throw new ConditionsNotMetException("Параметр 'size' должен быть положительным");}
     }
 
     public Post create(Post post) {
