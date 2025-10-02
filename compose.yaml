@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:16.1
+    container_name: catsgram_db
+    environment:
+      POSTGRES_DB: catsgram
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    container_name: catsgram_app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/catsgram
+      SPRING_DATASOURCE_USERNAME: dbuser
+      SPRING_DATASOURCE_PASSWORD: password123
+    depends_on:
+      - db

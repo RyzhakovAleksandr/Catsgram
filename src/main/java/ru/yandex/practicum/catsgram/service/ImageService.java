@@ -91,7 +91,7 @@ public class ImageService {
                     String.valueOf(post.getAuthorId()), post.getId().toString());
             Path filePath = uploadPath.resolve(uniqueFileName);
 
-            if(!Files.exists(uploadPath)) {
+            if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 

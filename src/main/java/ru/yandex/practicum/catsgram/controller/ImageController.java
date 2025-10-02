@@ -26,8 +26,8 @@ public class ImageController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(
                 ContentDisposition.attachment()
-                        .filename(imageData.getName()).
-                        build()
+                        .filename(imageData.getName())
+                        .build()
         );
         return new ResponseEntity<>(imageData.getData(), headers, HttpStatus.OK);
     }
